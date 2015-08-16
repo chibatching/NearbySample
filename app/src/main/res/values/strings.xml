@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Nearby Sample</string>
+    <string name="hint_sending">Sending…</string>
+    <string name="hint_input">Input message</string>
+    <string name="send">Send</string>
+</resources>
