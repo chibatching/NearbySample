@@ -5,7 +5,8 @@ Nearby Messages API sample chat application for Kotlin
 
 ### Enable Nearby Messages
 
-Setup your Nearby Messagees API at [Google Developers Console](https://console.developers.google.com/)
+Setup your Nearby Messagees API at [Google Developers Console](https://console.developers.google.com/).
+
 Follow official instruction below.
 https://developers.google.com/nearby/messages/android/get-started
 
