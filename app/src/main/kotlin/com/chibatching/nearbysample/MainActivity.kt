@@ -37,6 +37,7 @@ public class MainActivity : AppCompatActivity() {
         val TAG = "MainActivity"
         val REQUEST_RESOLVE_ERROR = 1
         val ENCODE = "UTF-8"
+        val NAMESPACE = "nearby-sample"
     }
 
     // Nearby connection callback
@@ -83,7 +84,7 @@ public class MainActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener {
             // Make sending message when send button clicked
-            val chatMessage = ChatMessage(editText.getText().toString(), System.currentTimeMillis(), true)
+            val chatMessage = ChatMessage(editText.getText().toString(), System.currentTimeMillis())
             editText.setText("")
             textInputLayout.setHint(getString(R.string.hint_sending))
             if (getCurrentFocus() != null) {
@@ -92,12 +93,15 @@ public class MainActivity : AppCompatActivity() {
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0)
             }
             // Publish message
-            Nearby.Messages.publish(googleApiClient, Message(chatMessage.toString().toByteArray(ENCODE)), strategy)
+            val message = Message(chatMessage.toString().toByteArray(ENCODE), ChatMessage.TYPE_USER_CHAT)
+            Nearby.Messages.publish(googleApiClient, message, strategy)
                     .setResultCallback(NearbyResultCallback("send", {
                         // When send succeeded, show my message
                         textInputLayout.setHint(getString(R.string.hint_input))
                         addNewMessage(chatMessage)
                     }))
+            Log.d(TAG, "Send message: ${message.toString()}")
+            Log.d(TAG, "Send chat: ${String(message.getContent(), ENCODE)}")
         }
 
         listView.setAdapter(messageAdapter)

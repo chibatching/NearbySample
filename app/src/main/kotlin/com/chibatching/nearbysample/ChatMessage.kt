@@ -7,13 +7,20 @@ import java.util.*
 public data class ChatMessage(
         val text: String,
         val timestamp: Long,
-        val self: Boolean,
-        val id: String = UUID.randomUUID().toString()) : Comparable<ChatMessage> {
+        val id: String = UUID.randomUUID().toString(),
+        val type: String = ChatMessage.TYPE_USER_CHAT) : Comparable<ChatMessage> {
 
     companion object {
+        val TYPE_USER_CHAT = "user-chat"
+        val TYPE_BEACON = "beacon-message"
+
         fun fromJson(jsonString: String) : ChatMessage {
             val json = JSONObject(jsonString)
-            return ChatMessage(json.getString("text"), json.getLong("timestamp"), json.getBoolean("self"), json.getString("id"))
+            return if (json.getString("type").equals(TYPE_USER_CHAT)) {
+                ChatMessage(json.getString("text"), json.getLong("timestamp"), json.getString("id"), TYPE_USER_CHAT)
+            } else {
+                ChatMessage(json.getString("text"), System.currentTimeMillis(), json.getString("id"), TYPE_BEACON)
+            }
         }
     }
 
@@ -22,7 +29,7 @@ public data class ChatMessage(
         json.put("id", id)
         json.put("text", text)
         json.put("timestamp", timestamp)
-        json.put("self", self)
+        json.put("type", type)
         return json.toString()
     }
 
